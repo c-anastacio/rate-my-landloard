@@ -29,3 +29,17 @@ module.exports.validateRegisterUser = (
     valid: Object.keys(errors).length == 0,
   };
 };
+
+module.exports.validateUserLogin = (username, password) => {
+  const errors = {};
+  if (username.trim() === "") {
+    errors.username = "Empty username";
+  }
+  if (password.trim() === "") {
+    errors.password = "Empty password";
+  }
+  return {
+    errors,
+    valid: Object.keys(errors).length == 0,
+  };
+};
