@@ -1,17 +1,10 @@
 const { ApolloServer } = require('apollo-server');
-const gql = require('graphql-tag');
-const typeDefs = gql`
-    type Query{
-        sayHi: String!
-    }
-`
+const mongoose = require('mongoose');
 
-//Each mutation or req needs a resolver
-const resolvers = {
-    Query:{
-        sayHi: () => "Hello World!"
-    }
-}
+const typeDefs = require('./graphql/typedef');
+const resolvers = require('./graphql/resolvers');
+const { MONGODB, APPDB, PORT } = require('./config.js');
+
 
 //takes in typedefs and resolvers
 const server = new ApolloServer({
@@ -19,7 +12,30 @@ const server = new ApolloServer({
     resolvers
 })
 
-server.listen({ port: 5000 })
-.then(res => {
-    console.log(`Server running on port ${res.url}`)
-})
+//Asyncs are easier than chained thens 
+const loadDB = async () => {
+  try {
+    console.log("New Connection");
+    await mongoose.connect(MONGODB, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const serverConnect = async () => {
+    try {
+        console.log(`Server Connected to port ${PORT}`)
+        server.listen({port: PORT})
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+loadDB();
+serverConnect();
+
+
+
