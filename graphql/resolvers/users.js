@@ -46,7 +46,7 @@ module.exports = {
         id: userLogin._id,
         token,
       };
-    },
+    }, //Login End
 
     async register(
       _,
@@ -89,6 +89,6 @@ module.exports = {
         id: res._id,
         token,
       };
-    },
+    }, //Register End
   },
 };
